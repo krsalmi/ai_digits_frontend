@@ -1,0 +1,36 @@
+.buttonClass {
+    background-color: rgb(161, 213, 255);
+    color: white;
+    padding: 10px;
+    margin: 10px;
+}
+
+.buttonsDiv {
+    margin: auto;
+    margin-top: 20px;
+    /* width: 500px; */
+    display: flex;
+}
+
+.hoverText {
+    position: relative;
+    top: 20px;
+    width: 480px;
+    margin: auto;
+    height: 80px;
+}
+
+/* @media only screen and (max-width: 1700px) {
+
+    .buttonsDiv {
+        width: 450px;
+    }
+}
+*/
+
+@media only screen and (max-width: 1500px) {
+
+    .hoverText {
+        width: 400px;
+    }
+}

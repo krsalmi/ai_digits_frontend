@@ -1,0 +1,53 @@
+.container {
+    background-image: url("../img/digits__image.png");
+    background-repeat: repeat-x;
+}
+
+/* This will blur everything inside this container */
+.container.modalOpen {
+    filter: blur(3px); /* Adjust blur intensity to your preference */
+    pointer-events: none;
+}
+  
+/* Ensures the modal itself doesn't get blurred or lose interactivity */
+.modal {
+    filter: none;
+    pointer-events: all; /* Allows interactions with modal */
+}
+
+.innerContainer {
+    display: flex;
+    height: 100vh;
+    width: 80vw;
+    margin: auto;
+    padding: 30px;
+    background-color: white;
+}
+
+.canvasSideContainer {
+    margin-top: 50px;
+    display: flex;
+}
+
+
+@media only screen and (max-width: 1700px) {
+
+    .titleImg {
+        height: 300px;
+    }
+
+    .arrowImg {
+        height: 300px;
+    }
+}
+
+@media only screen and (max-width: 1500px) {
+
+    .titleImg {
+        height: 250px;
+    }
+
+    .arrowImg {
+        height: 250px;
+    }
+}

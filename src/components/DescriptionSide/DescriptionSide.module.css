@@ -1,0 +1,67 @@
+.container {
+    height: auto;
+    width: 60%;
+}
+
+.cnnTitleDiv {
+    padding-top: 50px;
+}
+
+.cnnTitle {
+    color: rgb(89, 135, 185);
+}
+
+
+
+.cnnDescription {
+    padding-top: 20px;
+}
+
+.imagesDiv {
+    display: flex;
+    justify-content: space-between;
+}
+
+.titleImg {
+    height: 400px;
+}
+
+.arrowImg {
+    height: 350px;
+    margin-right: -50px;
+}
+
+.cnnDescDiv {
+    max-width: 700px;
+}
+
+@media only screen and (max-width: 1700px) {
+
+    .titleImg {
+        height: 370px;
+    }
+
+    .arrowImg {
+        height: 350px;
+        margin-right: -70px;
+    }
+
+    .cnnDescDiv {
+        max-width: 650px;
+    }
+}
+
+@media only screen and (max-width: 1500px) {
+
+    .titleImg {
+        height: 330px;
+    }
+
+    .arrowImg {
+        height: 300px;
+    }
+    
+    .cnnDescDiv {
+        max-width: 550px;
+    }
+}

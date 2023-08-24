@@ -1,0 +1,43 @@
+.progressDiv {
+    position: relative;
+    top: 5%;
+}
+
+.progressRow {
+    line-height: 50%;
+}
+
+.bold {
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.buttonClass {
+    background-color: rgb(161, 213, 255);
+    color: white;
+    padding: 10px;
+    margin: 10px;
+}
+
+.titleButtonDiv {
+    display: flex;
+    justify-content: space-between;
+}
+
+.titleDiv {
+    position: relative;
+    width: 185px;
+    display: flex;
+}
+
+.title {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.fixedWidth {
+    display: inline-block;
+    width: 70px; 
+    text-align: right;
+}

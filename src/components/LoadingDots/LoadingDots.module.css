@@ -1,0 +1,11 @@
+.loadingDots {
+    margin-top: 18px;
+    margin-left: -80px;
+}
+
+@media only screen and (max-width: 1500px) {
+
+    .loadingDots {
+        margin-left: -60px;
+    }
+}
