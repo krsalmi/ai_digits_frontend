@@ -275,6 +275,7 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
                 startBannerAlert("Polling failure", "danger");
                 console.log("Setting model status back to 0");
                 setTrainingStatus(MODEL_CREATION_STATUS[0]);
+                retrainWasPressed.current = false;
             }
         }, POLL_INTERVAL)
     };
