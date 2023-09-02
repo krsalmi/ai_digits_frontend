@@ -221,6 +221,7 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
             }
         } catch (error) {
             console.log('Network error trying to fetch training progress. ', error);
+            startBannerAlert("Failed to fetch training progress", "danger");
         }
     };
 
@@ -235,6 +236,7 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
             }
         } catch (error) {
             console.log('Network error trying to fetch model accuracy. ', error);
+            startBannerAlert("Failed to fetch model accuracy", "danger");
         }
     };
 
@@ -270,6 +272,9 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
             } catch (error) {
                 clearInterval(poller);
                 console.log("Error while polling ", error);
+                startBannerAlert("Polling failure", "danger");
+                console.log("Setting model status back to 0");
+                setTrainingStatus(MODEL_CREATION_STATUS[0]);
             }
         }, POLL_INTERVAL)
     };
