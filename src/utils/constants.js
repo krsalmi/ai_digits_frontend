@@ -1,7 +1,6 @@
 // API endpoints
 
-const BASE = process.env.REACT_APP_BACKEND_URL;
-//const BASE = "http://localhost:10000"
+const BASE = process.env.REACT_APP_BASE_URL;
 
 export const API_ENDPOINTS = {
     DRAWING: BASE + '/api/drawing/',
