@@ -8,14 +8,15 @@ export const API_ENDPOINTS = {
     RETRAIN_MODEL: BASE + '/api/retrain_model/',
     TRAINING_PROGRESS: BASE + '/api/training_progress/',
     STOP_TRAINING: BASE + '/api/stop_training/',
-    MODEL_ACCURACY: BASE + '/api/model_accuracy/'
+    MODEL_ACCURACY: BASE + '/api/model_accuracy/',
+    PROGRESS_SSE: BASE + '/api/progress/'
 };
 
 export const HOVER_TEXTS = {
     ANALYZE_DRAWING: "Clicking 'Analyze Drawing' sends the canvas drawing for analysis by the trained model. The predicted digit will be displayed on-screen.",
     CLEAR_CANVAS: "Clicking the 'Clear Canvas' button clears the canvas and deletes anything currently in the drawing box.",
     TRAIN_MODEL: `Clicking the 'Train Model' button begins the process of rebuilding and training a Convolutional Neural Network and \
-        saving the model to be used after training. The entire process takes about 5 minutes, with progress updates displayed on-screen.`
+        saving the model to be used after training. The entire process takes about 9 minutes, with progress updates displayed on-screen.`
 };
 
 export const CNN_DESCRIPTION = {
@@ -33,4 +34,20 @@ export const WAITING = {
     TRAINING: "Training in progress",
     EPOCH: "Waiting for information on each training cycle (epoch)...",
     CANCEL: "Cancelling training"
+};
+
+export const MODEL_CREATION_STATUS = {
+    NOT_STARTED: "not_started",
+    IN_PROGRESS: "in_progress",
+    COMPLETED: "completed",
+    INTERRUPTED: "interrupted",
+    ERROR: "error"
+};
+
+export const CANVAS_PROPERTIES = {
+    IMG_HEIGHT: 280,
+    IMG_WIDTH: 280,
+    LINE_THICKNESS: 25,
+    CANVAS_BG_COLOR: "#FFFFFF",
+    CANVAS_BRUSH_SHAPE: "round"
 };
