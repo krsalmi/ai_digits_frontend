@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import classes from './ButtonsComponent.module.css';
 import { HOVER_TEXTS } from '../../utils/constants';
+import { Triangle } from 'react-loader-spinner';
 
 const HoverButton = ({label, onClickFunction, hoverText, setHoverMessage, isDisabled=false}) => {
 
@@ -13,8 +14,8 @@ const HoverButton = ({label, onClickFunction, hoverText, setHoverMessage, isDisa
     );
 };
 
-const ButtonsComponent = ({onClickButton1, onClickButton2, onClickButton3, disabled}) => {
-
+const ButtonsComponent = ({onClickButton1, onClickButton2, onClickButton3, isTrainDisabled}) => {
+    console.log("train si disabled ", isTrainDisabled)
     const [hoverMessage, setHoverMessage] = useState(null);
 
     return (
@@ -25,24 +26,22 @@ const ButtonsComponent = ({onClickButton1, onClickButton2, onClickButton3, disab
                     onClickFunction={onClickButton1}
                     hoverText={HOVER_TEXTS.ANALYZE_DRAWING}
                     setHoverMessage={setHoverMessage}
-                    isDisabled={disabled}
                 />
                 <HoverButton
                     label={"CLEAR CANVAS"}
                     onClickFunction={onClickButton2}
                     hoverText={HOVER_TEXTS.CLEAR_CANVAS}
                     setHoverMessage={setHoverMessage}
-                    isDisabled={disabled}
                 />
                 <HoverButton
                     label={"TRAIN MODEL"}
                     onClickFunction={onClickButton3}
                     hoverText={HOVER_TEXTS.TRAIN_MODEL}
                     setHoverMessage={setHoverMessage}
-                    isDisabled={disabled}
+                    isDisabled={isTrainDisabled}
                 />
             </div>
-            {(hoverMessage && !disabled) &&
+            {(hoverMessage && !isTrainDisabled) &&
                 <div className={classes.hoverText}>
                     {hoverMessage}
                 </div>
