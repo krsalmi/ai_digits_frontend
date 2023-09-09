@@ -2,15 +2,10 @@ import React, { useState, useRef, useEffect }  from 'react';
 import classes from './DrawingCanvas.module.css';
 import { API_ENDPOINTS } from '../../utils/constants';
 import ButtonsComponent from '../ButtonsComponent/ButtonsComponent';
-import ProgressBox from '../ProgressBox/ProgressBox';
+import ProgressBox from '../Progress/ProgressBox';
+import { MODEL_CREATION_STATUS, CANVAS_PROPERTIES } from '../../utils/constants';
 
-const IMG_HEIGHT = 280;
-const IMG_WIDTH = 280;
-const LINE_THICKNESS = 25;
-const POLL_INTERVAL = 5000; //Poll every 5 sec
-const MODEL_CREATION_STATUS = ["not_started", "in_progress", "completed", "interrupted"];
-const CANVAS_BG_COLOR = "#FFFFFF";
-const CANVAS_BRUSH_SHAPE = "round";
+
 
 
 const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredictionModal}) => {
@@ -18,29 +13,21 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
     const [isDrawing, setIsDrawing] = useState(false);
     const sendWasPressed = useRef(false);
     const retrainWasPressed = useRef(false);
-    const [trainingStatus, setTrainingStatus] = useState(MODEL_CREATION_STATUS[0]);
-    const [progressLine, setProgressLine] = useState({});
+    const [trainingStatus, setTrainingStatus] = useState(MODEL_CREATION_STATUS.NOT_STARTED);
 
-    let poller = null;
 
     useEffect(() => {
         const canvas = canvasRef.current;
-        const ctx = canvas.getContext("2d");
-        ctx.fillStyle = CANVAS_BG_COLOR;
-        ctx.fillRect(0, 0, IMG_WIDTH, IMG_HEIGHT);
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
+        ctx.fillStyle = CANVAS_PROPERTIES.CANVAS_BG_COLOR;
+        ctx.fillRect(0, 0, CANVAS_PROPERTIES.IMG_WIDTH, CANVAS_PROPERTIES.IMG_HEIGHT);
     }, []);
-    
-    useEffect(() => {
-        if(trainingStatus === MODEL_CREATION_STATUS[2]) {
-            displayModelAccuracy();
-        }
-    }, [trainingStatus]);
 
     const startDrawing = (event) => {
         const canvas = canvasRef.current;
-        const ctx = canvas.getContext("2d");
-        ctx.lineWidth = LINE_THICKNESS;
-        ctx.lineCap = CANVAS_BRUSH_SHAPE;
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
+        ctx.lineWidth = CANVAS_PROPERTIES.LINE_THICKNESS;
+        ctx.lineCap = CANVAS_PROPERTIES.CANVAS_BRUSH_SHAPE;
         setIsDrawing(true);
         draw(event);
     };
@@ -48,7 +35,7 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
     const endDrawing = () => {
         setIsDrawing(false);
         const canvas = canvasRef.current;
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
         ctx.beginPath();
     };
 
@@ -71,8 +58,20 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = CANVAS_BG_COLOR;
-        ctx.fillRect(0, 0, IMG_WIDTH, IMG_HEIGHT);
+        ctx.fillStyle = CANVAS_PROPERTIES.CANVAS_BG_COLOR;
+        ctx.fillRect(0, 0, CANVAS_PROPERTIES.IMG_WIDTH, CANVAS_PROPERTIES.IMG_HEIGHT);
+    };
+
+    const isCanvasEmpty = () => {
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext("2d");
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        for (let i = 0; i < imageData.length; i += 4) {
+            if (imageData[i] !== 255 || imageData[i + 1] !== 255 || imageData[i + 2] !== 255 || imageData[i + 3] !== 255) {
+                return false; // Not empty, non-white pixel was found
+            }
+        }
+        return true; // Is empty
     };
 
     // Shrinks the canvas to 28x28, which is size of images in MNIST dataset
@@ -91,7 +90,7 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
             nextCanvas.width = width;
             nextCanvas.height = height;
     
-            const ctx = nextCanvas.getContext('2d');
+            const ctx = nextCanvas.getContext("2d", { willReadFrequently: true });
             ctx.drawImage(currentCanvas, 0, 0, width, height);
     
             currentCanvas = nextCanvas;
@@ -100,7 +99,7 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
         const finalCanvas = document.createElement('canvas');
         finalCanvas.width = targetSize;
         finalCanvas.height = targetSize;
-        const ctxFinal = finalCanvas.getContext('2d');
+        const ctxFinal = finalCanvas.getContext("2d", { willReadFrequently: true });
         ctxFinal.drawImage(currentCanvas, 0, 0, targetSize, targetSize);
     
         return finalCanvas;
@@ -127,7 +126,7 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
         tempCanvas.height = originalCanvas.height;
     
         // Get the context and draw the original canvas onto the temporary one
-        const ctx = tempCanvas.getContext('2d');
+        const ctx = tempCanvas.getContext("2d", { willReadFrequently: true });
         ctx.drawImage(originalCanvas, 0, 0);
         return tempCanvas;
     };
@@ -138,16 +137,21 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
         const canvas = canvasRef.current;
         // Create a temporary canvas which will be altered and processed
         const tempCanvas = createTempCanvas(canvas);
-        const ctx = tempCanvas.getContext("2d");
+        const ctx = tempCanvas.getContext("2d", { willReadFrequently: true });
         invertColors(ctx);
         const pixelatedCanvas = downscaleInSteps(tempCanvas, 28, 3);
         return pixelatedCanvas;
     };
 
     const sendDrawing = async () => {
+        if (isCanvasEmpty()) {
+            startBannerAlert("Cannot analyze an empty canvas.");
+            return;
+        }
+
         if (!sendWasPressed.current) {
             sendWasPressed.current = true;
- 
+
             const preprocessedCanvas = preliminaryPreprocessingCanvas();
             const pixelatedData = preprocessedCanvas.toDataURL();
 
@@ -190,9 +194,7 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
 
                 if (response.status === 202) { //202 accepted, model creation has started
                     console.log('Model creation has started')
-                    setTrainingStatus(MODEL_CREATION_STATUS[1]);
-                    setProgressLine({});
-                    startPolling();
+                    setTrainingStatus(MODEL_CREATION_STATUS.IN_PROGRESS);
                 } else if (response.status === 409) { //Conflict, retraining has already been triggered from somewhere else
                     console.log("Conflict, model is being trained");
                     startBannerAlert("Conflict! The model is being trained by someone else, please wait, and try again later.", "danger");
@@ -207,21 +209,6 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
                 startBannerAlert("Network error sending 'Train' request", "danger");
                 retrainWasPressed.current = false;
             }
-        }
-    };
-
-    const fetchTrainingProgress = async () => {
-        try {
-            const response = await fetch(API_ENDPOINTS.TRAINING_PROGRESS);
-            const data = await response.json();
-    
-            if (data.epoch !== undefined) {
-                const accuracy = (data.accuracy * 100).toFixed(2);
-                setProgressLine({epoch: data.epoch, accuracy: accuracy});
-            }
-        } catch (error) {
-            console.log('Network error trying to fetch training progress. ', error);
-            startBannerAlert("Failed to fetch training progress", "danger");
         }
     };
 
@@ -240,63 +227,41 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
         }
     };
 
-    const startPolling = async () => {
 
-        poller = setInterval(async () => {
-            try {
-                const response = await fetch(API_ENDPOINTS.CHECK_MODEL_STATUS);
-                const data = await response.json();
+    const endTraining = (reason) => {
+        if (reason === MODEL_CREATION_STATUS.COMPLETED) {
+            console.log("Model creation has successfully ended.");
+            setTrainingStatus(MODEL_CREATION_STATUS.COMPLETED);
+            displayModelAccuracy();
+        } else if (reason === MODEL_CREATION_STATUS.INTERRUPTED){
+            console.log("Model creation was interrupted.")
+            setTrainingStatus(MODEL_CREATION_STATUS.INTERRUPTED);
+            startBannerAlert("Model building and training was cancelled.");
+        } else {
+            console.log("Error while creating model.")
+            setTrainingStatus(MODEL_CREATION_STATUS.ERROR);
+            startBannerAlert("Error while creating model", "danger");
+        }
+        retrainWasPressed.current = false;
+    }
 
-                if (!response.ok) {
-                    console.log(`Unexpected status code: ${response.status}`);
-                    clearInterval(poller);
-                } else {
-                    if (data?.model_status === MODEL_CREATION_STATUS[1]) {
-                        setTrainingStatus(MODEL_CREATION_STATUS[1]);
-                    } else {
-                        if (data?.model_status === MODEL_CREATION_STATUS[2]) {
-                            console.log("Model creation has successfully ended.");
-                            setTrainingStatus(MODEL_CREATION_STATUS[2]);
-                        } else if (data?.model_status === MODEL_CREATION_STATUS[3]) {
-                            console.log("Model creation was interrupted.")
-                            setTrainingStatus(MODEL_CREATION_STATUS[3]);
-                            startBannerAlert("Model building and training was cancelled.");
-                        }
-                        clearInterval(poller);
-                        retrainWasPressed.current = false;
-                        
-                    }
-                }
-                fetchTrainingProgress();
-
-            } catch (error) {
-                clearInterval(poller);
-                console.log("Error while polling ", error);
-                startBannerAlert("Polling failure", "danger");
-                console.log("Setting model status back to 0");
-                setTrainingStatus(MODEL_CREATION_STATUS[0]);
-                retrainWasPressed.current = false;
-            }
-        }, POLL_INTERVAL)
-    };
-
-    const disableButtons = (retrainWasPressed.current || sendWasPressed.current);
+    const disableTrain = retrainWasPressed.current;
 
 
     return (
         <div>
             <canvas
                 ref={canvasRef}
-                width={IMG_WIDTH}
-                height={IMG_HEIGHT}
+                width={CANVAS_PROPERTIES.IMG_WIDTH}
+                height={CANVAS_PROPERTIES.IMG_HEIGHT}
                 onMouseDown={startDrawing}
                 onMouseUp={endDrawing}
                 onMouseMove={draw}
                 className={classes.drawingCanvas}
             />
-            <ButtonsComponent onClickButton1={sendDrawing} onClickButton2={clearCanvas} onClickButton3={retrainModel} disabled={disableButtons}/>
-            {trainingStatus === MODEL_CREATION_STATUS[1] &&
-                <ProgressBox progressLine={progressLine} />
+            <ButtonsComponent onClickButton1={sendDrawing} onClickButton2={clearCanvas} onClickButton3={retrainModel} isTrainDisabled={disableTrain}/>
+            {trainingStatus === MODEL_CREATION_STATUS.IN_PROGRESS &&
+                <ProgressBox endTraining={endTraining}/>
             }
         </div>
     );
