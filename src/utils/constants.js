@@ -4,9 +4,9 @@ const BASE = process.env.REACT_APP_BASE_URL;
 
 export const API_ENDPOINTS = {
     DRAWING: BASE + '/api/drawing/',
-    CHECK_MODEL_STATUS: BASE + '/api/check_model_status/',
+    CHECK_MODEL_STATUS: BASE + '/api/check_model_status/', //was used together with TRAINING_PROGRESS, currently not used
     RETRAIN_MODEL: BASE + '/api/retrain_model/',
-    TRAINING_PROGRESS: BASE + '/api/training_progress/',
+    TRAINING_PROGRESS: BASE + '/api/training_progress/', //was used when training progress was done through polling, now use PROGRESS_SSE
     STOP_TRAINING: BASE + '/api/stop_training/',
     MODEL_ACCURACY: BASE + '/api/model_accuracy/',
     PROGRESS_SSE: BASE + '/api/progress/'
