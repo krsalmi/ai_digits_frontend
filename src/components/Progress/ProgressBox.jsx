@@ -82,8 +82,6 @@ const ProgressBox = ({endTraining}) => {
                                 return updatedLines;
                             });
                             savedEpochRef.current = currentEpoch;
-                            // Set percentage to 0 when epoch changes
-                            setPercentage(0);
                         }
                     } catch {
                         console.log("Failed to parse epoch");
@@ -143,6 +141,9 @@ const ProgressBox = ({endTraining}) => {
                 accuracyLines.map((line) => (
                     <p className={classes.progressRow} key={line.epoch}>Achieved accuracy on training data: <span className={`${classes.bold} ${classes.fixedWidth}`}>{line.accuracy}%</span> after epoch: <span className={classes.bold}>{line.epoch}/{maxEpochs.current}</span></p>
                 ))
+            }
+            { process.env.NODE_ENV === "production" && accuracyLines.length === 0 &&
+                <p>{process.env.REACT_APP_TRAINING_INFO}</p>
             }
             {savedEpochRef.current < maxEpochs.current &&
                 <ProgressBar percentage={percentage} />
