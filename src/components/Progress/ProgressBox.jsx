@@ -6,6 +6,8 @@ import LoadingDots from "../LoadingDots/LoadingDots";
 import ProgressBar from "./ProgressBar";
 
 
+const TIMEOUT_DURATION = 20000;  // 20 seconds timeout for waiting for SSE signals
+
 const ProgressBox = ({endTraining}) => {
     const [accuracyLines, setAccuracyLines] = useState(new Set());
     const [percentage, setPercentage] = useState(0);
@@ -13,6 +15,7 @@ const ProgressBox = ({endTraining}) => {
     const maxEpochs = useRef(0);
     const [cancellingTraining, setCancellingTraining] = useState(false);
     const stopWasClicked = useRef(false);
+    const timeoutRef = useRef(null);
 
     const stopTraining = async () => {
         const response = await fetch(API_ENDPOINTS.STOP_TRAINING);
@@ -29,7 +32,21 @@ const ProgressBox = ({endTraining}) => {
     useEffect(() => {
         const eventSource = new EventSource(API_ENDPOINTS.PROGRESS_SSE);
 
+        // Close connection and display error message if timeout occurs while waiting for
+        // SSE signal. Usually this would result if out of memory etc
+        const handleTimeout = () => {
+            console.warn("SSE timeout occurred.");
+            eventSource.close();
+            endTraining("error");
+        };
+
+        timeoutRef.current = setTimeout(handleTimeout, TIMEOUT_DURATION);
+
         eventSource.onmessage = (event) => {
+            // Signal received, so timeout can be cleared
+            clearTimeout(timeoutRef.current);
+            timeoutRef.current = setTimeout(handleTimeout, TIMEOUT_DURATION);
+
             const data = JSON.parse(event.data);
             // Update progress if it's not a close event
             if (data.event !== "close") {
