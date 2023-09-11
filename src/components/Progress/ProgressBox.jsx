@@ -9,7 +9,7 @@ import ProgressBar from "./ProgressBar";
 const TIMEOUT_DURATION = 5000;  // 20 seconds timeout for waiting for SSE signals
 
 const ProgressBox = ({endTraining}) => {
-    const [accuracyLines, setAccuracyLines] = useState(new Set());
+    const [accuracyLines, setAccuracyLines] = useState([]);
     const [percentage, setPercentage] = useState(0);
     const savedEpochRef = useRef(0);
     const maxEpochs = useRef(0);
@@ -101,6 +101,9 @@ const ProgressBox = ({endTraining}) => {
             console.error("SSE Error received:", event);
             if (event.target.readyState === EventSource.CLOSED) {
                 console.log('SSE closed');
+            } else {
+                eventSource.close();
+                endTraining("error");
             }
         };
 
@@ -126,7 +129,6 @@ const ProgressBox = ({endTraining}) => {
     }, []);
 
     const isDisabled = stopWasClicked.current;
-    console.log('Environment:', process.env.NODE_ENV);
 
     return (
         <div className={classes.progressDiv}>
