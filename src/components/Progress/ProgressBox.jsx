@@ -126,6 +126,7 @@ const ProgressBox = ({endTraining}) => {
     }, []);
 
     const isDisabled = stopWasClicked.current;
+    console.log('Environment:', process.env.NODE_ENV);
 
     return (
         <div className={classes.progressDiv}>
