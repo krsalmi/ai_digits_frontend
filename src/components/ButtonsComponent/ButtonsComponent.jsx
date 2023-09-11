@@ -15,7 +15,6 @@ const HoverButton = ({label, onClickFunction, hoverText, setHoverMessage, isDisa
 };
 
 const ButtonsComponent = ({onClickButton1, onClickButton2, onClickButton3, isTrainDisabled}) => {
-    console.log("train si disabled ", isTrainDisabled)
     const [hoverMessage, setHoverMessage] = useState(null);
 
     return (
