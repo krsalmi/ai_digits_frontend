@@ -6,7 +6,7 @@ import LoadingDots from "../LoadingDots/LoadingDots";
 import ProgressBar from "./ProgressBar";
 
 
-const TIMEOUT_DURATION = 20000;  // 20 seconds timeout for waiting for SSE signals
+const TIMEOUT_DURATION = 5000;  // 20 seconds timeout for waiting for SSE signals
 
 const ProgressBox = ({endTraining}) => {
     const [accuracyLines, setAccuracyLines] = useState(new Set());
@@ -18,7 +18,9 @@ const ProgressBox = ({endTraining}) => {
     const timeoutRef = useRef(null);
 
     const stopTraining = async () => {
-        const response = await fetch(API_ENDPOINTS.STOP_TRAINING);
+        const response = await fetch(API_ENDPOINTS.STOP_TRAINING, {
+            method: 'POST'
+        });
 
         if (response.ok) {
             console.log("Stop signal successfully sent")
@@ -35,17 +37,29 @@ const ProgressBox = ({endTraining}) => {
         // Close connection and display error message if timeout occurs while waiting for
         // SSE signal. Usually this would result if out of memory etc
         const handleTimeout = () => {
-            console.warn("SSE timeout occurred.");
-            eventSource.close();
-            endTraining("error");
+            if (eventSource.readyState !== EventSource.CLOSED) {
+                console.warn(`SSE timeout occurred for timeout ID: ${timeoutRef.current}`);
+                eventSource.close();
+                endTraining("error");
+            }
+            clearTimeout(timeoutRef.current);  // Clear the current timeout
         };
 
         timeoutRef.current = setTimeout(handleTimeout, TIMEOUT_DURATION);
+        // console.log(`Timeout set ${timeoutRef.current}`);
+
+        eventSource.onopen = () => {
+            console.log("SSE connection opened");
+        };
 
         eventSource.onmessage = (event) => {
+            // console.log("Received SSE message:", event.data);
+
             // Signal received, so timeout can be cleared
             clearTimeout(timeoutRef.current);
+            // console.log("Timeout cleared", timeoutRef.current);
             timeoutRef.current = setTimeout(handleTimeout, TIMEOUT_DURATION);
+            // console.log("Timeout set", timeoutRef.current);
 
             const data = JSON.parse(event.data);
             // Update progress if it's not a close event
@@ -68,46 +82,48 @@ const ProgressBox = ({endTraining}) => {
                                 return updatedLines;
                             });
                             savedEpochRef.current = currentEpoch;
+                            // Set percentage to 0 when epoch changes
+                            setPercentage(0);
                         }
                     } catch {
                         console.log("Failed to parse epoch");
                     }
                 }
             } else {
+                clearTimeout(timeoutRef.current);
+                // console.log("Timeout cleared", timeoutRef.current);
                 // Handle close event
                 console.log(`Connection closed due to: ${data.reason}`);
                 eventSource.close();
                 endTraining(data.reason);
-
             }
         };
 
         eventSource.onerror = (event) => {
+            console.error("SSE Error received:", event);
             if (event.target.readyState === EventSource.CLOSED) {
                 console.log('SSE closed');
-            } else {
-                console.log('SSE error:', event);
             }
         };
 
-        const handleBeforeUnload = async (event) => {
-            event.preventDefault();
-    
-            // Send stop training message to backend if page is left/reloaded. 
-            // Use syncr. XMLHttpRequest because async operations might not complete during page unload
-            const request = new XMLHttpRequest();
-            request.open('GET', API_ENDPOINTS.STOP_TRAINING, false);
-            request.send();
-    
-            // Some browsers might show a confirmation dialog for page unload, so display a custom message
-            event.returnValue = 'Are you sure you want to leave? Training will be stopped.';
+
+        const stopTrainingOnExit = (event) => {
+            // The sendBeacon method returns true if the user agent is able to successfully queue the data for transfer, Otherwise it returns false.
+            
+            const beaconStatus = navigator.sendBeacon(API_ENDPOINTS.STOP_TRAINING);
+            if (!beaconStatus) {
+                console.warn("Beacon request failed. Training may not stop on server.");
+            }
+            
+            // Return value for older browsers
+            //event.returnValue = 'Do you want to leave the page? Training will be stopped.';
         };
-    
-        window.addEventListener('beforeunload', handleBeforeUnload);
+        
+        window.addEventListener('beforeunload', stopTrainingOnExit);
 
         return () => {
             eventSource.close();  // Close connection if unmounted
-            window.removeEventListener('beforeunload', handleBeforeUnload); // Cleanup listener
+            window.removeEventListener('beforeunload', stopTrainingOnExit); // Cleanup listener
         };
     }, []);
 
