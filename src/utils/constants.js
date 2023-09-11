@@ -13,7 +13,8 @@ export const API_ENDPOINTS = {
 };
 
 export const HOVER_TEXTS = {
-    ANALYZE_DRAWING: "Clicking 'Analyze Drawing' sends the canvas drawing for analysis by the trained model. The predicted digit will be displayed on-screen.",
+    ANALYZE_DRAWING: `Clicking 'Analyze Drawing' sends the canvas drawing for analysis by the trained model. \
+                    The predicted digit will be displayed on-screen. Digits drawn in the middle of the canvas will perform better.`,
     CLEAR_CANVAS: "Clicking the 'Clear Canvas' button clears the canvas and deletes anything currently in the drawing box.",
     TRAIN_MODEL: `Clicking the 'Train Model' button begins the process of rebuilding and training a Convolutional Neural Network and \
         saving the model to be used after training. The entire process takes about 9 minutes, with progress updates displayed on-screen.`
