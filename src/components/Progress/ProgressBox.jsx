@@ -90,12 +90,26 @@ const ProgressBox = ({endTraining}) => {
             }
         };
 
+        const handleBeforeUnload = async (event) => {
+            event.preventDefault();
+    
+            // Send stop training message to backend if page is left/reloaded. 
+            // Use syncr. XMLHttpRequest because async operations might not complete during page unload
+            const request = new XMLHttpRequest();
+            request.open('GET', API_ENDPOINTS.STOP_TRAINING, false);
+            request.send();
+    
+            // Some browsers might show a confirmation dialog for page unload, so display a custom message
+            event.returnValue = 'Are you sure you want to leave? Training will be stopped.';
+        };
+    
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
         return () => {
-            eventSource.close();  // Ensure the connection is closed if component is unmounted
+            eventSource.close();  // Close connection if unmounted
+            window.removeEventListener('beforeunload', handleBeforeUnload); // Cleanup listener
         };
     }, []);
-
-
 
     const isDisabled = stopWasClicked.current;
 
