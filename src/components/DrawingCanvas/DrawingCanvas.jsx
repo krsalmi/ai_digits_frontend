@@ -190,7 +190,9 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
             retrainWasPressed.current = true;
 
             try {
-                const response = await fetch(API_ENDPOINTS.RETRAIN_MODEL);
+                const response = await fetch(API_ENDPOINTS.RETRAIN_MODEL, {
+                    method: 'POST'
+                });
 
                 if (response.status === 202) { //202 accepted, model creation has started
                     console.log('Model creation has started')
