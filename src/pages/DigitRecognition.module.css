@@ -17,7 +17,7 @@
 
 .innerContainer {
     display: flex;
-    height: 100vh;
+    height: 100%;
     width: 80vw;
     margin: auto;
     padding: 30px;
@@ -55,5 +55,21 @@
 
     .arrowImg {
         height: 250px;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    .container {
+        min-width: 1200px;
+    }
+
+    .innerContainer {
+        min-width: 980px;
+    }
+}
+
+@media only screen and (max-height: 800px) {
+    .container {
+        min-height: 800px;
     }
 }
