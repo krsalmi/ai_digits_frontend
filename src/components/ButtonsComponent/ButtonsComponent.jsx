@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
 import classes from './ButtonsComponent.module.css';
 import { HOVER_TEXTS } from '../../utils/constants';
-import { Triangle } from 'react-loader-spinner';
 
-const HoverButton = ({label, onClickFunction, hoverText, setHoverMessage, isDisabled=false}) => {
+/**
+ * HoverButton is a React component that renders a button with a hover effect.
+ * 
+ * It takes the following props:
+ * - label: The text to display on the button
+ * - onClickFunction: The callback when the button is clicked
+ * - hoverText: The text to display when hovering over the button 
+ * - setHoverMessage: Callback to set the hover message in the parent component
+ * - isDisabled: Whether the button should be disabled
+ */
+const HoverButton = ({ label, onClickFunction, hoverText, setHoverMessage, isDisabled = false }) => {
 
     const buttonClasses = `${classes.buttonClass} btn`
 
@@ -14,7 +23,17 @@ const HoverButton = ({label, onClickFunction, hoverText, setHoverMessage, isDisa
     );
 };
 
-const ButtonsComponent = ({onClickButton1, onClickButton2, onClickButton3, isTrainDisabled}) => {
+/**
+ * ButtonsComponent renders the buttons for analyzing drawings, 
+ * clearing the canvas, and training the model.
+ * 
+ * It takes in the following props:
+ * - onClickButtonAnalyze: callback for when "Analyze Drawing" is clicked
+ * - onClickButtonClear: callback for when "Clear Canvas" is clicked  
+ * - onClickButtonTrain: callback for when "Train Model" is clicked
+ * - isTrainDisabled: whether the "Train Model" button should be disabled
+ */
+const ButtonsComponent = ({ onClickButtonAnalyze, onClickButtonClear, onClickButtonTrain, isTrainDisabled }) => {
     const [hoverMessage, setHoverMessage] = useState(null);
 
     return (
@@ -22,19 +41,19 @@ const ButtonsComponent = ({onClickButton1, onClickButton2, onClickButton3, isTra
             <div className={classes.buttonsDiv}>
                 <HoverButton 
                     label={"ANALYZE DRAWING"}
-                    onClickFunction={onClickButton1}
+                    onClickFunction={onClickButtonAnalyze}
                     hoverText={HOVER_TEXTS.ANALYZE_DRAWING}
                     setHoverMessage={setHoverMessage}
                 />
                 <HoverButton
                     label={"CLEAR CANVAS"}
-                    onClickFunction={onClickButton2}
+                    onClickFunction={onClickButtonClear}
                     hoverText={HOVER_TEXTS.CLEAR_CANVAS}
                     setHoverMessage={setHoverMessage}
                 />
                 <HoverButton
                     label={"TRAIN MODEL"}
-                    onClickFunction={onClickButton3}
+                    onClickFunction={onClickButtonTrain}
                     hoverText={HOVER_TEXTS.TRAIN_MODEL}
                     setHoverMessage={setHoverMessage}
                     isDisabled={isTrainDisabled}

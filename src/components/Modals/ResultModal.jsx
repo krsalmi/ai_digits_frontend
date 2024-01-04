@@ -3,8 +3,13 @@ import Modal from 'react-overlays/Modal';
 import classes from './Modals.module.css';
 import PropTypes from 'prop-types';
 
-
-const ResultModal = ({show, onClose, accuracy}) => {
+/**
+ * ResultModal React component that displays the model training result.
+ * @param {boolean} show - Whether to show the modal. 
+ * @param {Function} onClose - Callback function when modal is closed.
+ * @param {number} accuracy - Accuracy percentage of trained model.
+ */
+const ResultModal = ({ show, onClose, accuracy }) => {
 
     const buttonClasses = `btn btn-primary ${classes.modalCloseButton}`
   

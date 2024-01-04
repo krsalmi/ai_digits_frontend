@@ -6,9 +6,15 @@ import LoadingDots from "../LoadingDots/LoadingDots";
 import ProgressBar from "./ProgressBar";
 
 
-const TIMEOUT_DURATION = 5000;  // 20 seconds timeout for waiting for SSE signals
+const TIMEOUT_DURATION = 5000;  // 50 seconds timeout for waiting for SSE signals
 
-const ProgressBox = ({endTraining}) => {
+/**
+ * The ProgressBox component renders a box showing training progress
+ * and allows the user to end the training session via the endTraining callback.
+ *
+ * @param {Function} endTraining - Callback function to end model training.
+*/
+const ProgressBox = ({ endTraining }) => {
     const [accuracyLines, setAccuracyLines] = useState([]);
     const [percentage, setPercentage] = useState(0);
     const savedEpochRef = useRef(0);
@@ -52,6 +58,10 @@ const ProgressBox = ({endTraining}) => {
             console.log("SSE connection opened");
         };
 
+        /**
+         * Handles incoming messages from the server-sent events stream.
+         * Updates component state based on received data.
+         */
         eventSource.onmessage = (event) => {
             // console.log("Received SSE message:", event.data);
 
@@ -97,6 +107,10 @@ const ProgressBox = ({endTraining}) => {
             }
         };
 
+        /**
+         * Handles errors from the server-sent events stream.
+         * Closes the connection and ends training on error.
+         */
         eventSource.onerror = (event) => {
             console.error("SSE Error received:", event);
             if (event.target.readyState === EventSource.CLOSED) {
@@ -108,8 +122,13 @@ const ProgressBox = ({endTraining}) => {
         };
 
 
+        /**
+         * stopTrainingOnExit is an event listener that runs when the beforeunload event fires, 
+         * indicating the user is leaving/refreshing the page. It sends a request to the server
+         * to stop the training job.
+         * The sendBeacon method returns true if the user agent is able to successfully queue the data for transfer, Otherwise it returns false.
+         */
         const stopTrainingOnExit = (event) => {
-            // The sendBeacon method returns true if the user agent is able to successfully queue the data for transfer, Otherwise it returns false.
             
             const beaconStatus = navigator.sendBeacon(API_ENDPOINTS.STOP_TRAINING);
             if (!beaconStatus) {

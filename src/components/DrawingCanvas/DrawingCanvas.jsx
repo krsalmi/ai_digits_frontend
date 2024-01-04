@@ -5,9 +5,13 @@ import ButtonsComponent from '../ButtonsComponent/ButtonsComponent';
 import ProgressBox from '../Progress/ProgressBox';
 import { MODEL_CREATION_STATUS, CANVAS_PROPERTIES } from '../../utils/constants';
 
-
-
-
+/**
+ * DrawingCanvas component renders a canvas element that allows 
+ * the user to draw digits with mouse or touch events. It handles
+ * the canvas rendering context, tracks drawing state, and exposes 
+ * methods to clear the canvas, start/stop drawing, and send drawings
+ * to the backend API for classification.
+ */
 const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredictionModal}) => {
     const canvasRef = useRef(null);
     const [isDrawing, setIsDrawing] = useState(false);
@@ -74,10 +78,16 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
         return true; // Is empty
     };
 
-    // Shrinks the canvas to 28x28, which is size of images in MNIST dataset
-    // Downscaling is done in steps so that edges aren't too harsh and some grey will be present
-    // Downscaling causes a "pixelated" look
-    function downscaleInSteps(sourceCanvas, targetSize, steps) {
+    /**
+     * Shrinks the canvas to 28x28, which is size of images in MNIST dataset.
+     * Downscaling is done in steps so that edges aren't too harsh and some grey will be present.
+     * Downscaling causes a "pixelated" look.
+     * 
+     * @param {HTMLCanvasElement} sourceCanvas - The canvas to downscale.
+     * @param {number} targetSize - The target width and height to downscale to.
+     * @param {number} steps - The number of downscaling steps to take. More steps result in a smoother downscaled image.
+     */
+    const downscaleInSteps = (sourceCanvas, targetSize, steps) =>{
         let width = sourceCanvas.width;
         let height = sourceCanvas.height;
     
@@ -105,7 +115,10 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
         return finalCanvas;
     };
 
-    // Inverts colors (black to white, white to black) to be more consistent with the data in MNIST
+    /**
+     * Inverts the colors in the given canvas context. 
+     * Changes colors from black to white and vice versa.
+     */
     const invertColors = (ctx) => {
         const imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
         const data = imageData.data;
@@ -119,7 +132,11 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
         ctx.putImageData(imageData, 0, 0);
     };
 
-    // Creates a temporary canvas, so changes made won't be visible to the end user
+    /**
+     * Creates a temporary canvas copy of the provided canvas.
+     * This allows modifications to be made without affecting the original
+     * and changes made won't be visible to the end user.
+     */
     const createTempCanvas = (originalCanvas) => {
         const tempCanvas = document.createElement('canvas');
         tempCanvas.width = originalCanvas.width;
@@ -131,8 +148,11 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
         return tempCanvas;
     };
 
-    // Preprocess canvas: create a temp canvas, invert its colors, and downscale it
-    // so that the image is as close as possible to images in MNIST dataset
+    /**
+     * Preprocesses the canvas by creating a temporary copy, inverting colors, 
+     * and downscaling so that the image is as close as possible to images in MNIST dataset,
+     * before sending to API for digit prediction.
+     */
     const preliminaryPreprocessingCanvas = () => {
         const canvas = canvasRef.current;
         // Create a temporary canvas which will be altered and processed
@@ -143,6 +163,11 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
         return pixelatedCanvas;
     };
 
+    /**
+     * Sends the drawing on the canvas to the backend API for digit prediction.
+     * Preprocesses the canvas first by inverting colors and downscaling before 
+     * sending to API. Handles API response and displays prediction to user.
+     */
     const sendDrawing = async () => {
         if (isCanvasEmpty()) {
             startBannerAlert("Cannot analyze an empty canvas.");
@@ -185,6 +210,11 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
         }
     };
 
+    /**
+     * Initiates asynchronous request to backend API to retrain the digit recognition model.
+     * Handles API response and displays an alert to the user if an error has occured.
+     * 
+     */
     const retrainModel = async () => {
         if (!retrainWasPressed.current) {
             retrainWasPressed.current = true;
@@ -214,6 +244,10 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
         }
     };
 
+    /**
+     * Retrieves the current digit recognition model's accuracy percentage 
+     * from the backend API and displays it in a modal dialog.
+     */
     const displayModelAccuracy = async () => {
         try {
             const response = await fetch(API_ENDPOINTS.MODEL_ACCURACY);
@@ -229,7 +263,12 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
         }
     };
 
-
+    /**
+     * Callback function that is called when model training ends, 
+     * either successfully or due to an error/interruption.
+     * @param {string} reason - The reason the training ended - 
+     * either 'completed', 'interrupted', or 'error'.
+     */
     const endTraining = (reason) => {
         if (reason === MODEL_CREATION_STATUS.COMPLETED) {
             console.log("Model creation has successfully ended.");
@@ -261,7 +300,7 @@ const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredi
                 onMouseMove={draw}
                 className={classes.drawingCanvas}
             />
-            <ButtonsComponent onClickButton1={sendDrawing} onClickButton2={clearCanvas} onClickButton3={retrainModel} isTrainDisabled={disableTrain}/>
+            <ButtonsComponent onClickButtonAnalyze={sendDrawing} onClickButtonClear={clearCanvas} onClickButtonTrain={retrainModel} isTrainDisabled={disableTrain}/>
             {trainingStatus === MODEL_CREATION_STATUS.IN_PROGRESS &&
                 <ProgressBox endTraining={endTraining}/>
             }

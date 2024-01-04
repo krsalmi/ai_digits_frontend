@@ -8,6 +8,13 @@ import PredictionModal from '../components/Modals/PredictionModal';
 
 const BANNER_TIMEOUT = 5000;
 
+/**
+ * DigitRecognition is a React component that renders the digit recognition page.
+ * It manages state for showing alert banners, result modals, and prediction modals.
+ * It contains handler functions to open/close modals and start banner alerts.
+ * Renders the DrawingCanvas, DescriptionSide, AlertBanner, ResultModal, 
+ * and PredictionModal components.
+ */
 const DigitRecognition = () => {
     const [showAlertBanner, setShowAlertBanner] = useState(false);
     const [bannerMessage, setBannerMessage] = useState('');
@@ -47,15 +54,15 @@ const DigitRecognition = () => {
 
     return (
         <div className={showResultModal ? `${classes.container} ${classes.modalOpen}` : classes.container}>
-            <ResultModal show={showResultModal} onClose={handleCloseModal} accuracy={accuracy}/>
-            <PredictionModal show={showPredictionModal} onClose={handleCloseModal} prediction={prediction} confidence={confidence}/>
-            {showAlertBanner && 
+            <ResultModal show={showResultModal} onClose={handleCloseModal} accuracy={accuracy} />
+            <PredictionModal show={showPredictionModal} onClose={handleCloseModal} prediction={prediction} confidence={confidence} />
+            {showAlertBanner &&
                 <AlertBanner message={bannerMessage} variant={bannerVariant} />
             }
             <div className={classes.innerContainer}>
                 <DescriptionSide></DescriptionSide>
                 <div className={classes.canvasSideContainer}>
-                    <DrawingCanvas startBannerAlert={startBannerAlert} handleOpenResultModal={handleOpenResultModal} handleOpenPredictionModal={handleOpenPredictionModal}/>
+                    <DrawingCanvas startBannerAlert={startBannerAlert} handleOpenResultModal={handleOpenResultModal} handleOpenPredictionModal={handleOpenPredictionModal} />
                 </div>
             </div>
         </div>

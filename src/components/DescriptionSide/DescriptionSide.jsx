@@ -4,6 +4,10 @@ import titleImage from '../../img/Digit Recognition with Machine Learning.png';
 import { CNN_DESCRIPTION } from "../../utils/constants";
 import arrowImage from '../../img/Draw a digit and test it out.png';
 
+/**
+ * DescriptionSide component.
+ * Renders the description side content (visible on the right side of the page).
+ */
 const DescriptionSide = () => {
 
     return (

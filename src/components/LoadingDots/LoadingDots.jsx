@@ -1,6 +1,9 @@
 import { ThreeDots } from  'react-loader-spinner';
 import classes from './LoadingDots.module.css';
 
+/**
+ * Renders a loading indicator using ThreeDots from react-loader-spinner.
+ */
 const LoadingDots = () => {
     return (
         <div className={classes.loadingDots}>

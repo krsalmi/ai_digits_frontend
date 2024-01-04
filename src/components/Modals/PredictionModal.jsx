@@ -4,7 +4,17 @@ import classes from './Modals.module.css';
 import PropTypes from 'prop-types';
 
 
-const ResultModal = ({show, onClose, prediction, confidence}) => {
+/**
+ * ResultModal React component that displays the prediction result.
+ * Received confidence estimate might be over 99.99%, which rounds up to 100.00%.
+ * However, to not confuse the user with an over-confident estimate, we round it down to 99.99%.
+ * 
+ * @param {boolean} show - Whether to show the modal. 
+ * @param {Function} onClose - Callback for closing the modal.
+ * @param {string} prediction - The predicted digit.
+ * @param {string} confidence - The confidence percentage.
+ */
+const ResultModal = ({ show, onClose, prediction, confidence }) => {
 
     const buttonClasses = `btn btn-primary ${classes.modalCloseButton}`
     const confidenceEstimate = confidence === "100.00" ? "> 99.99" : confidence;

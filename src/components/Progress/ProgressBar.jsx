@@ -1,7 +1,11 @@
 import React from 'react';
 import classes from './Progress.module.css';
 
-const ProgressBar = ({percentage}) => {
+/**
+ * ProgressBar React component that renders a progress bar.
+ * Takes in a percentage prop to determine the width of the progress bar.
+ */
+const ProgressBar = ({ percentage }) => {
 
   return (
     <div className={classes.progressBarContainer}>
