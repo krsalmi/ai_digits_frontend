@@ -8,7 +8,7 @@
     filter: blur(3px); /* Adjust blur intensity to your preference */
     pointer-events: none;
 }
-  
+
 /* Ensures the modal itself doesn't get blurred or lose interactivity */
 .modal {
     filter: none;
@@ -28,7 +28,6 @@
     margin-top: 50px;
     display: flex;
 }
-
 
 @media only screen and (max-width: 1700px) {
 

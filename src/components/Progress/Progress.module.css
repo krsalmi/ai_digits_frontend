@@ -48,13 +48,25 @@
     padding: 3px;
     margin: 20px 0;
     border-radius: 4px;
-  }
+}
   
-  .progressBar {
+.progressBar {
     height: 20px;
     width: 0;
     background-color: #4CAF50;
     border-radius: 2px;
     transition: width 0.4s ease-in-out;
-  }
+}
+
+.trainingLines {
+    max-height: 130px;
+    overflow: auto;
+    padding-top: 10px;
+}
+
+@media only screen and (max-height: 860px) {
+    .trainingLines {
+        max-height: 70px;
+    }
+}
   

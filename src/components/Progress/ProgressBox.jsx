@@ -52,7 +52,6 @@ const ProgressBox = ({ endTraining }) => {
         };
 
         timeoutRef.current = setTimeout(handleTimeout, TIMEOUT_DURATION);
-        // console.log(`Timeout set ${timeoutRef.current}`);
 
         eventSource.onopen = () => {
             console.log("SSE connection opened");
@@ -63,13 +62,9 @@ const ProgressBox = ({ endTraining }) => {
          * Updates component state based on received data.
          */
         eventSource.onmessage = (event) => {
-            // console.log("Received SSE message:", event.data);
-
             // Signal received, so timeout can be cleared
             clearTimeout(timeoutRef.current);
-            // console.log("Timeout cleared", timeoutRef.current);
             timeoutRef.current = setTimeout(handleTimeout, TIMEOUT_DURATION);
-            // console.log("Timeout set", timeoutRef.current);
 
             const data = JSON.parse(event.data);
             // Update progress if it's not a close event
@@ -99,7 +94,6 @@ const ProgressBox = ({ endTraining }) => {
                 }
             } else {
                 clearTimeout(timeoutRef.current);
-                // console.log("Timeout cleared", timeoutRef.current);
                 // Handle close event
                 console.log(`Connection closed due to: ${data.reason}`);
                 eventSource.close();
@@ -134,9 +128,6 @@ const ProgressBox = ({ endTraining }) => {
             if (!beaconStatus) {
                 console.warn("Beacon request failed. Training may not stop on server.");
             }
-            
-            // Return value for older browsers
-            //event.returnValue = 'Do you want to leave the page? Training will be stopped.';
         };
         
         window.addEventListener('beforeunload', stopTrainingOnExit);
@@ -159,9 +150,20 @@ const ProgressBox = ({ endTraining }) => {
                 <button className={`${classes.buttonClass} btn`} onClick={stopTraining} disabled={isDisabled}>CANCEL TRAINING</button>
             </div>
             <h6>{WAITING.EPOCH}</h6>
+            <div className={classes.trainingLines}>
             {accuracyLines.length > 0 && 
                 accuracyLines.map((line) => (
                     <p className={classes.progressRow} key={line.epoch}>Achieved accuracy on training data: <span className={`${classes.bold} ${classes.fixedWidth}`}>{line.accuracy}%</span> after epoch: <span className={classes.bold}>{line.epoch}/{maxEpochs.current}</span></p>
+                ))
+            }
+            </div>
+
+
+            {accuracyLines.length > 0 && 
+                accuracyLines.map((line) => (
+                    <p className={classes.progressRow} key={line.epoch}>Achieved accuracy on training data: 
+                        <span className={`${classes.bold} ${classes.fixedWidth}`}>{line.accuracy}%</span>
+                         after epoch: <span className={classes.bold}>{line.epoch}/{maxEpochs.current}</span></p>
                 ))
             }
             { process.env.NODE_ENV === "production" && accuracyLines.length === 0 &&
