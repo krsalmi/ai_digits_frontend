@@ -17,7 +17,7 @@ export const HOVER_TEXTS = {
                     The predicted digit will be displayed on-screen. Digits drawn in the middle of the canvas will perform better.`,
     CLEAR_CANVAS: "Clicking the 'Clear Canvas' button clears the canvas and deletes anything currently in the drawing box.",
     TRAIN_MODEL: `Clicking the 'Train Model' button begins the process of rebuilding and training a Convolutional Neural Network and \
-        saving the model to be used after training. The entire process takes about 8 minutes, with progress updates displayed on-screen.`
+        and displays the achieved precision. The entire process takes about 8 minutes, with progress updates displayed on-screen.`
 };
 
 export const CNN_DESCRIPTION = {
@@ -28,7 +28,7 @@ export const CNN_DESCRIPTION = {
         happens in a dense layer packed with 128 neurons, and a special dropout layer is added to the mix to mitigate overfitting risks.`,
     TEXT_2: ` All training data \
         comes from the popular MNIST dataset, with images first being normalized and reshaped. An adaptive learning rate is implemented for a smoother training experience. \
-        Once training concludes, the model undergoes testing and is saved for subsequent operations.`
+        Once training concludes, the model undergoes testing and the accuracy it achieves is displayed on-screen.`
 };
 
 export const WAITING = {
