@@ -7,11 +7,18 @@ import { MODEL_CREATION_STATUS, CANVAS_PROPERTIES } from '../../utils/constants'
 import {createTempCanvas, invertCanvasColors, downscaleInSteps, clearCanvas, isCanvasEmpty } from '../../utils/canvasUtils';
 
 /**
- * DrawingCanvas component renders a canvas element that allows 
- * the user to draw digits with mouse or touch events. It handles
- * the canvas rendering context, tracks drawing state, and exposes 
- * methods to clear the canvas, start/stop drawing, and send drawings
- * to the backend API for classification.
+ * `DrawingCanvas` provides an interactive canvas for users to draw on.
+ * It includes functionality for drawing, sending the drawing to a backend for digit recognition,
+ * retraining the digit recognition model, and displaying model accuracy.
+ * The component manages several states such as whether the user is currently drawing (`isDrawing`),
+ * the status of training (`trainingStatus`), and flags to prevent multiple simultaneous send or retrain requests.
+ *
+ * It provides functions to handle different interactions:
+ * - `startDrawing`, `endDrawing`, and `draw` for user drawing interactions.
+ * - `sendDrawing` to send the canvas content to the backend for digit prediction.
+ * - `retrainModel` to initiate the retraining of the digit recognition model.
+ * - `displayModelAccuracy` to fetch and display the current model's accuracy.
+ * - `endTraining` as a callback for when model training ends.
  */
 const DrawingCanvas = ({startBannerAlert, handleOpenResultModal, handleOpenPredictionModal}) => {
     const canvasRef = useRef(null);
