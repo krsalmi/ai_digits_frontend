@@ -10,10 +10,7 @@ Node.js and npm
 
 ### Installation
 Clone the repo  
-`git clone https://github.com/yourname/digit-recognition.git`
-  
-Install server dependencies  
-`pip install -r server/requirements.txt`
+`git clone https://github.com/krsalmi/ai_digits_frontend.git`
   
 Install client dependencies  
 `npm install`
