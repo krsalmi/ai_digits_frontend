@@ -24,8 +24,9 @@ export const CNN_DESCRIPTION = {
     TITLE: "Details of the digit recognition system",
     TEXT_1: `The foundation of this digit recognizer is a Convolutional Neural Network (CNN) built using TensorFlow's Keras library. \
         At its core, the network contains two convolutional \
-        layers for extracting key features from handwritten digits and two max-pooling layers for dimensionality reduction. The final classification \
-        happens in a dense layer packed with 128 neurons, and a special dropout layer is added to the mix to mitigate overfitting risks.`,
+        layers for extracting key features from handwritten digits and two max-pooling layers for dimensionality reduction. \
+        The CNN also contains a hidden layer with 128 nodes and a special dropout layer to mitigate overfitting risks. \
+        The final classification happens in the output layer, which provides the probability of the input image belonging to each of the 10 classes. `,
     TEXT_2: ` All training data \
         comes from the popular MNIST dataset, with images first being normalized and reshaped. An adaptive learning rate is implemented for a smoother training experience. \
         Once training concludes, the model undergoes testing and the accuracy it achieves is displayed on-screen.`
