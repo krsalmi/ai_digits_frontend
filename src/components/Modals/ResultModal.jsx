@@ -24,7 +24,7 @@ const ResultModal = ({ show, onClose, accuracy }) => {
            <div>
                 <div className={classes.modalContent}>
                     <h4>Training complete</h4>
-                    <p>Congratulations! You've built, trained and saved a model that achieves a <span className={classes.bold}>{accuracy}%</span> accuracy on testing data!
+                    <p>Congratulations! You've built, trained and saved a model that achieves a <span className={classes.bold}>{accuracy}%</span> accuracy score on testing data!
                     Analysis of the drawings will however continue to happen with the original locally trained model.</p>
                 </div>
                 <div className={classes.btnDiv}>

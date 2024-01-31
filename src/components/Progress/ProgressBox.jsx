@@ -154,8 +154,7 @@ const ProgressBox = ({ endTraining }) => {
             {accuracyLines.length > 0 && 
                 accuracyLines.map((line) => (
                     <p className={classes.progressRow} key={line.epoch}>Achieved accuracy on training data: 
-                        <span className={`${classes.bold} ${classes.fixedWidth}`}>{line.accuracy}%</span>
-                         after epoch: <span className={classes.bold}>{line.epoch}/{maxEpochs.current}</span></p>
+                        <span className={`${classes.bold} ${classes.fixedWidth}`}>{line.accuracy}%</span> after epoch: <span className={classes.bold}>{line.epoch}/{maxEpochs.current}</span></p>
                 ))
             }
             </div>
