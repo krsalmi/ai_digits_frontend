@@ -1,7 +1,7 @@
 # Frontend for Digit Recognition Web App
 Frontend, built with React, for a digit recognition web app. It allows users to draw digits 
 on a canvas and send the drawing to a backend server to predict what digit they drew using a pre-trained machine learning model.
-Users can also try retraining the model themselves. The design of the page is original and the image components were made in Canva. Check out the live site at [digitrecognition](https://digitrecognition-ai.onrender.com), hosted on Render. The backend code can be viewed here: [https://github.com/krsalmi/ai_digits_backend.git](https://github.com/krsalmi/ai_digits_backend.git).
+Users can also try retraining the model themselves. The design of the page is original and the image components were made in Canva. Check out the live site at [digitrecognition](https://digitrecognition-ai.onrender.com), hosted on Render. The backend code can be viewed [here](https://github.com/krsalmi/ai_digits_backend.git).
 
 ## Notable components
 **DrawingCanvas** is the main component in the project. It provides an interactive canvas for users to draw on
