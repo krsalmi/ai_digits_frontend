@@ -153,19 +153,12 @@ const ProgressBox = ({ endTraining }) => {
             <div className={classes.trainingLines}>
             {accuracyLines.length > 0 && 
                 accuracyLines.map((line) => (
-                    <p className={classes.progressRow} key={line.epoch}>Achieved accuracy on training data: <span className={`${classes.bold} ${classes.fixedWidth}`}>{line.accuracy}%</span> after epoch: <span className={classes.bold}>{line.epoch}/{maxEpochs.current}</span></p>
-                ))
-            }
-            </div>
-
-
-            {accuracyLines.length > 0 && 
-                accuracyLines.map((line) => (
                     <p className={classes.progressRow} key={line.epoch}>Achieved accuracy on training data: 
                         <span className={`${classes.bold} ${classes.fixedWidth}`}>{line.accuracy}%</span>
                          after epoch: <span className={classes.bold}>{line.epoch}/{maxEpochs.current}</span></p>
                 ))
             }
+            </div>
             { process.env.NODE_ENV === "production" && accuracyLines.length === 0 &&
                 <p>{process.env.REACT_APP_TRAINING_INFO}</p>
             }
