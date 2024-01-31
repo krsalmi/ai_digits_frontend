@@ -17,19 +17,17 @@ export const HOVER_TEXTS = {
                     The predicted digit will be displayed on-screen. Digits drawn in the middle of the canvas will perform better.`,
     CLEAR_CANVAS: "Clicking the 'Clear Canvas' button clears the canvas and deletes anything currently in the drawing box.",
     TRAIN_MODEL: `Clicking the 'Train Model' button begins the process of rebuilding and training a Convolutional Neural Network and \
-        and displays the achieved precision. The entire process takes about 8 minutes, with progress updates displayed on-screen.`
+        and displays the achieved precision. The entire process takes about 3.5 minutes, with progress updates displayed on-screen.`
 };
 
 export const CNN_DESCRIPTION = {
     TITLE: "Details of the digit recognition system",
-    TEXT_1: `The foundation of this digit recognizer is a Convolutional Neural Network (CNN) built using TensorFlow's Keras library. \
-        At its core, the network contains two convolutional \
-        layers for extracting key features from handwritten digits and two max-pooling layers for dimensionality reduction. \
-        The CNN also contains a hidden layer with 128 nodes and a special dropout layer to mitigate overfitting risks. \
-        The final classification happens in the output layer, which provides the probability of the input image belonging to each of the 10 classes. `,
-    TEXT_2: ` All training data \
-        comes from the popular MNIST dataset, with images first being normalized and reshaped. An adaptive learning rate is implemented for a smoother training experience. \
-        Once training concludes, the model undergoes testing and the accuracy it achieves is displayed on-screen.`
+    TEXT_1: `This digit recognition system is built on a Convolutional Neural Network (CNN) using TensorFlow's Keras library. \
+    The CNN features two convolutional layers for feature extraction from handwritten digits, paired with two max-pooling layers \
+    for reducing dimensions. Additionally, it includes a hidden layer with 128 nodes and a dropout layer to prevent overfitting. \
+    The network concludes with an output layer that predicts the digit class for each image across 10 possible categories.`,
+    TEXT_2: `The model is trained using the MNIST dataset, where images are normalized and reshaped for processing. \
+    Once training concludes, the model undergoes testing and the accuracy it achieves is displayed on-screen.`
 };
 
 export const WAITING = {
