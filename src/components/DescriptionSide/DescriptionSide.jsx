@@ -3,6 +3,7 @@ import classes from './DescriptionSide.module.css';
 import titleImage from '../../img/Digit Recognition with Machine Learning copy.webp';
 import { CNN_DESCRIPTION } from "../../utils/constants";
 import arrowImage from '../../img/Draw a digit and test it out copy.webp';
+import ImageWithConditionalFadeIn from "../ImageWithConditionalFadeIn/ImageWithConditionalFadeIn";
 
 /**
  * DescriptionSide component.
@@ -13,8 +14,10 @@ const DescriptionSide = () => {
     return (
         <div className={classes.container}>
             <div className={classes.imagesDiv}>
-                <img src={titleImage} alt="page title" className={classes.titleImg}/>
-                <img src={arrowImage} alt="Arrow" className={classes.arrowImg}/>
+                <ImageWithConditionalFadeIn src={titleImage} alt="page title" className="titleImg"></ImageWithConditionalFadeIn>
+                <ImageWithConditionalFadeIn src={arrowImage} alt="Arrow" className="arrowImg"></ImageWithConditionalFadeIn>
+                {/* <img src={titleImage} alt="page title" className={classes.titleImg}/>
+                <img src={arrowImage} alt="Arrow" className={classes.arrowImg}/> */}
             </div>
             <div className={classes.cnnDescDiv}>
                 <div className={classes.cnnTitleDiv}>
