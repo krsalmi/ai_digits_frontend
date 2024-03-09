@@ -1,8 +1,8 @@
 import React from "react";
 import classes from './DescriptionSide.module.css';
-import titleImage from '../../img/Digit Recognition with Machine Learning.png';
+import titleImage from '../../img/Digit Recognition with Machine Learning copy.webp';
 import { CNN_DESCRIPTION } from "../../utils/constants";
-import arrowImage from '../../img/Draw a digit and test it out.png';
+import arrowImage from '../../img/Draw a digit and test it out copy.webp';
 
 /**
  * DescriptionSide component.
