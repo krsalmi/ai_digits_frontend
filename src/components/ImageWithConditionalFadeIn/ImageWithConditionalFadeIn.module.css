@@ -1,18 +1,12 @@
-/* Styles for the image initially */
+/* ImageWithConditionalFadeIn.module.css */
 .imageInitial {
     opacity: 0;
-    transition: opacity 1s ease-in-out;
-  }
-  
-  /* Styles for the image once it's loaded */
-  .imageLoaded {
-    opacity: 1;
-  }
-  
-  /* Optional: Styles for when no transition is needed */
-  .imageNoTransition {
-    transition: none;
-  }
+    transition: opacity 0.5s ease-in-out; /* Adjusted for a quicker transition */
+}
+
+.imageLoaded {
+opacity: 1;
+}
 
 
 .titleImg {
@@ -22,11 +16,6 @@
 .arrowImg {
     height: 350px;
     margin-right: -50px;
-}
-
-.imageFadeIn {
-    opacity: 0,
-    opacity 1s ease-in-out;
 }
 
 

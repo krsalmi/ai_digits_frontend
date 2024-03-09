@@ -20,15 +20,21 @@
 .imagesDiv {
     display: flex;
     justify-content: space-between;
+    min-height: 400px;
+    min-width: 800px;
 }
 
 .titleImg {
     height: 400px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
 }
 
 .arrowImg {
     height: 350px;
     margin-right: -50px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
 }
 
 .cnnDescDiv {
@@ -49,6 +55,11 @@
     .cnnDescDiv {
         max-width: 650px;
     }
+
+    .imagesDiv {
+        min-height: 370px;
+        min-width: 600px;
+    }
 }
 
 @media only screen and (max-width: 1500px) {
@@ -63,5 +74,10 @@
     
     .cnnDescDiv {
         max-width: 550px;
+    }
+
+    .imagesDiv {
+        min-height: 330px;
+        min-width: 500px;
     }
 }
