@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import DrawingCanvas from "../components/DrawingCanvas/DrawingCanvas";
 import DescriptionSide from "../components/DescriptionSide/DescriptionSide";
-import classes from './DigitRecognition.module.css';
+import classes from './pageStyles.module.css';
 import AlertBanner from '../components/Alerts/AlertBanner';
 import ResultModal from '../components/Modals/ResultModal';
 import PredictionModal from '../components/Modals/PredictionModal';

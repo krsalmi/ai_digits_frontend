@@ -27,6 +27,7 @@
 .canvasSideContainer {
     margin-top: 50px;
     display: flex;
+    z-index: 100;
 }
 
 @media only screen and (max-width: 1700px) {
@@ -71,4 +72,25 @@
     .container {
         min-height: 800px;
     }
+}
+
+
+/* styles for mobile component page */
+.mobileBackground {
+    width: 100%;
+    height: 100vh;
+    background-image: url("../img/digits__image.png");
+    background-repeat: repeat-x;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.imgSorry {
+    width: 100%;
+}
+
+.mobileContainer {
+    width: 95%;
+    margin: auto;
 }
